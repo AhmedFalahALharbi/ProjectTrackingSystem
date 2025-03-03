@@ -10,30 +10,22 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Initialize the database context
         using (var context = new ApplicationDbContext())
         {
-            // 1. Ensure the database is created (if not already)
             context.Database.EnsureCreated();
 
-            // 2. Add some data for testing (optional)
             AddSampleData(context);
 
-            // 3. Task 1 - Query to find employees who have worked on more than 3 projects in the last 6 months
             FindEmployeesWithMoreThan3ProjectsIn6Months(context);
 
-            // 4. Task 2 - Use Dapper to optimize a query that retrieves all employees with their projects
             GetEmployeeProjectsWithDapper();
 
-            // 5. Task 3 - Implement stored procedure execution using Dapper to calculate bonuses
             CalculateEmployeeBonusesWithDapper();
 
-            // 6. Task 4 - Compare Entity Framework Core vs Dapper for fetching financial reports
             CompareEFCoreVsDapperForFinancialReports(context);
         }
     }
 
-    // 1. Task - Find employees who have worked on more than 3 projects in the last 6 months
     static void FindEmployeesWithMoreThan3ProjectsIn6Months(ApplicationDbContext context)
     {
         var sixMonthsAgo = DateTime.Now.AddMonths(-6);
@@ -52,7 +44,6 @@ class Program
         }
     }
 
-    // 2. Task - Use Dapper to fetch all employees with their projects (optimizing the query)
     static void GetEmployeeProjectsWithDapper()
     {
         string connectionString = "Server=localhost;Database=TrackingDB;Trusted_Connection=True;TrustServerCertificate=True;";
@@ -75,7 +66,6 @@ class Program
         }
     }
 
-    // 3. Task - Use Dapper to execute a stored procedure for calculating employee bonuses
     static void CalculateEmployeeBonusesWithDapper()
     {
         string connectionString = "Server=localhost;Database=TrackingDB;Trusted_Connection=True;TrustServerCertificate=True;";
@@ -83,7 +73,6 @@ class Program
         {
             connection.Open();
 
-            // Assume the stored procedure 'CalculateBonus' exists in the database
             var bonuses = connection.Query<EmployeeBonusDto>("CalculateBonus", commandType: System.Data.CommandType.StoredProcedure).ToList();
 
             Console.WriteLine("\nEmployee Bonuses (calculated using Dapper):");
@@ -94,10 +83,8 @@ class Program
         }
     }
 
-    // 4. Task - Compare EF Core and Dapper for financial reports
     static void CompareEFCoreVsDapperForFinancialReports(ApplicationDbContext context)
     {
-        // Using Entity Framework Core
         var departmentSalariesEFCore = context.Departments
             .Select(d => new
             {
@@ -112,7 +99,6 @@ class Program
             Console.WriteLine($"Department: {item.Department}, Total Salary: {item.TotalSalary}");
         }
 
-        // Using Dapper
         string connectionString = "Server=localhost;Database=TrackingDB;Trusted_Connection=True;TrustServerCertificate=True;";
         using (var connection = new SqlConnection(connectionString))
         {
@@ -133,7 +119,6 @@ class Program
         }
     }
 
-    // Add sample data for testing (optional)
     static void AddSampleData(ApplicationDbContext context)
     {
         if (!context.Departments.Any())
@@ -161,7 +146,6 @@ class Program
     }
 }
 
-// DTOs for Dapper queries
 public class EmployeeProjectDto
 {
     public string EmployeeName { get; set; }

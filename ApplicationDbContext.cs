@@ -18,7 +18,6 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<EmployeeProject>()
             .HasKey(ep => new { ep.EmployeeId, ep.ProjectId }); // Define composite primary key
 
-        // Optional: Configure relationships if needed
         modelBuilder.Entity<EmployeeProject>()
             .HasOne(ep => ep.Employee)
             .WithMany(e => e.EmployeeProjects)
